@@ -68,7 +68,7 @@ function! s:setup_pad(bufnr, vert, size, repel)
   execute (a:vert ? 'vertical ' : '') . 'resize ' . max([0, a:size])
   augroup goyop
     execute 'autocmd WinEnter,CursorMoved <buffer> nested call s:blank("'.a:repel.'")'
-    autocmd WinLeave <buffer> call s:hide_statusline()
+    "autocmd WinLeave <buffer> call s:hide_statusline()
   augroup END
 
   " To hide scrollbars of pad windows in GVim
@@ -107,6 +107,7 @@ endfunction
 
 function! s:tranquilize()
   let bg = s:get_color('Normal', 'bg#')
+  let fg = s:get_color('Normal', 'fg#')
   for grp in ['NonText', 'FoldColumn', 'ColorColumn', 'VertSplit',
             \ 'StatusLine', 'StatusLineNC', 'SignColumn']
     " -1 on Vim / '' on GVim
@@ -119,10 +120,12 @@ function! s:tranquilize()
     endif
     call s:set_color(grp, '', 'NONE')
   endfor
+call s:set_color('StatusLine', 'bg', bg)
+call s:set_color('StatusLine', 'fg', fg)
 endfunction
 
 function! s:hide_statusline()
-  setlocal statusline=\ 
+  "setlocal statusline=\ 
 endfunction
 
 function! s:hide_linenr()
@@ -263,8 +266,8 @@ function! s:goyo_on(dim)
     autocmd TabLeave    *        call s:goyo_off()
     autocmd VimResized  *        call s:resize_pads()
     autocmd ColorScheme *        call s:tranquilize()
-    autocmd BufWinEnter *        call s:hide_linenr() | call s:hide_statusline()
-    autocmd WinEnter,WinLeave *  call s:hide_statusline()
+    "autocmd BufWinEnter *        call s:hide_linenr() | call s:hide_statusline()
+    "autocmd WinEnter,WinLeave *  call s:hide_statusline()
     if has('nvim')
       autocmd TermClose * call feedkeys("\<plug>(goyo-resize)")
     endif
